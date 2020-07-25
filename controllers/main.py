@@ -34,16 +34,24 @@ class MeSombController(http.Controller):
             tx = request.env['payment.transaction'].sudo().search([('reference', '=', reference)])
         mesomb_url = tx.acquirer_id.mesomb_get_rest_action_url()
         app = tx.acquirer_id.mesomb_application_key
+        post['fees'] = tx.acquirer_id.mesomb_include_fees == 'True'
         headers = {
             'X-MeSomb-Application': app,
             'Content-Type': 'application/json'
         }
         urequest = requests.post(mesomb_url, headers=headers, json=post)
-        urequest.raise_for_status()
+        # urequest.raise_for_status()
         resp = urequest.json()
-        success = resp['success']
-        status = resp.get('status', 'SUCCESS' if success else 'FAIL')
-        message = resp.get('message')
+        if urequest.status_code >= 300:
+            status = 'FAIL'
+            message = resp.get('detail')
+        else:
+            success = resp['success']
+            status = resp.get('status', 'SUCCESS' if success else 'FAIL')
+            message = resp.get('message')
+
+        _logger.info('MeSomb: display response %s', pprint.pformat(resp))
+
         txn_id = None
         if status == 'SUCCESS':
             txn_id = resp.get('transaction', {}).get('pk')
@@ -58,9 +66,9 @@ class MeSombController(http.Controller):
                 tx._set_transaction_error('Validation error occured. Please contact your administrator.')
 
         elif status == 'FAIL':
-            _logger.warning('MeSomb: answered FAIL on data verification')
+            _logger.warning('MeSomb: answered FAIL on payment process')
             if tx:
-                tx._set_transaction_error('Invalid response from MeSomb. Please contact your administrator.')
+                tx._set_transaction_error(message)
 
         else:
             _logger.warning(
