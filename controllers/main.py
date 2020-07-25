@@ -28,6 +28,7 @@ class MeSombController(http.Controller):
                 Once data is validated, process it. """
         res = False
         post['payer'] = '237' + post['payer']
+        post['currency'] = post['currency_code']
         reference = post.get('reference')
         tx = None
         if reference:
@@ -86,5 +87,11 @@ class MeSombController(http.Controller):
             self.mesomb_validate_data(**post)
         except ValidationError:
             _logger.exception('Unable to validate the MeSomb payment')
+        return werkzeug.utils.redirect('/payment/process')
+
+    @http.route('/payment/mesomb/cancel', type='http', auth="public", csrf=False)
+    def paypal_cancel(self, **post):
+        """ When the user cancels its Paypal payment: GET on this route """
+        _logger.info('Beginning MeSomb cancel with post data %s', pprint.pformat(post))  # debug
         return werkzeug.utils.redirect('/payment/process')
 

@@ -1,18 +1,14 @@
 import json
 import logging
-import pprint
 
 from werkzeug import urls
 
 from odoo import api, fields, models, _
+
 from odoo.addons.payment.models.payment_acquirer import ValidationError
 from odoo.addons.payment_mesomb.controllers.main import MeSombController
 
 _logger = logging.getLogger(__name__)
-
-# The following currencies are integer only, see https://mesomb.com/docs/currencies#zero-decimal
-INT_CURRENCIES = [u'XAF']
-
 
 class AcquirerMeSomb(models.Model):
     _inherit = 'payment.acquirer'
@@ -66,8 +62,14 @@ class AcquirerMeSomb(models.Model):
 
     @api.model
     def _get_mesomb_urls(self, environment):
+        if environment == 'test':
+            return {
+                'mesomb_form_url': 'http://127.0.0.1:8000/en/external/payment/',
+                'mesomb_rest_url': 'https://mesomb.hachther.com/api/v1.0/payment/online/',
+            }
+
         return {
-            'mesomb_form_url': 'http://127.0.0.1:8000/en/external/payment/',
+            'mesomb_form_url': 'https://mesomb.hachther.com/en/external/payment/',
             'mesomb_rest_url': 'https://mesomb.hachther.com/api/v1.0/payment/online/',
         }
 
@@ -97,9 +99,9 @@ class TrxMeSomb(models.Model):
             raise ValidationError(error_msg)
         return txs[0]
 
-    def _mesomb_form_get_invalid_parameters(self, data):
-        invalid_parameters = []
-        _logger.info('Received a notification from Paypal with IPN version %s', data.get('notify_version'))
+    # def _mesomb_form_get_invalid_parameters(self, data):
+    #     invalid_parameters = []
+    #     _logger.info('Received a notification from Paypal with IPN version %s', data.get('notify_version'))
 
     def _mesomb_form_validate(self, data):
         self.ensure_one()
