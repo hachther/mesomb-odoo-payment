@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="payment_acquirer_mesomb" model="payment.acquirer">
+            <field name="name">MeSomb</field>
+            <field name="image_128" type="base64" file="payment_mesomb/static/src/img/icon.png"/>
+            <field name="provider">mesomb</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="view_template_id" ref="mesomb_form"/>
+<!--            <field name="registration_view_template_id" ref="mesomb_s2s_form"/>-->
+        </record>
+    </data>
+</odoo>

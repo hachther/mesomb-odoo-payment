@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="icon_mobile_money" model="payment.icon">
+        <field name="name">Mobile Money</field>
+        <field name="image" type="base64" file="payment_mesomb/static/src/img/momo.png"/>
+    </record>
+    <record id="icon_orange_money" model="payment.icon">
+        <field name="name">Orange Money</field>
+        <field name="image" type="base64" file="payment_mesomb/static/src/img/om.jpg"/>
+    </record>
+</odoo>
