@@ -9,7 +9,7 @@
                 <group attrs="{'invisible': [('provider', '!=', 'mesomb')]}">
                     <field name="mesomb_application_key" attrs="{'required':[ ('provider', '=', 'mesomb'), ('state', '!=', 'disabled')]}"/>
                     <field name="mesomb_include_fees"/>
-                    <a colspan="2" href="https://www.odoo.com/documentation/user/online/ecommerce/shopper_experience/paypal.html" target="_blank">How to configure your paypal account?</a>
+                    <a colspan="2" href="https://mesombweb.hachther.com/?p=9367" target="_blank">How to configure your MeSomb account?</a>
                 </group>
             </xpath>
         </field>
