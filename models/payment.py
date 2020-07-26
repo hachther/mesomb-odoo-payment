@@ -8,8 +8,6 @@ from odoo import api, fields, models, _
 from odoo.addons.payment.models.payment_acquirer import ValidationError
 from odoo.addons.payment_mesomb.controllers.main import MeSombController
 
-_logger = logging.getLogger(__name__)
-
 class AcquirerMeSomb(models.Model):
     _inherit = 'payment.acquirer'
 
@@ -20,6 +18,9 @@ class AcquirerMeSomb(models.Model):
                                          help="Check if should by add to the amount deducted to the customer",
                                          required_if_provider='mesomb',
                                          groups='base.group_user')
+    description = fields.Html('<p>MeSomb is the easiest way to accept mobile payments.</p><ul class="list-inline"><li class="list-inline-item"><i class="fa fa-check"></i>Mobile Payment</li><li class="list-inline-item"><i class="fa fa-check"></i>Online Payment</li><li class="list-inline-item"><i class="fa fa-check"></i>Payment Status Tracking</li></ul>')
+
+    _logger = logging.getLogger(__name__)
 
     def mesomb_form_generate_values(self, values):
         base_url = self.get_base_url()

@@ -3,11 +3,13 @@
     <data noupdate="1">
         <record id="payment_acquirer_mesomb" model="payment.acquirer">
             <field name="name">MeSomb</field>
+            <field name="display_as">Mobile Payment (by MeSomb)</field>
+            <field name="description">MeSomb is the easiest way to accept mobile payments (Mobile Money, Orange Money...).</field>
             <field name="image_128" type="base64" file="payment_mesomb/static/src/img/icon.png"/>
             <field name="provider">mesomb</field>
             <field name="company_id" ref="base.main_company"/>
             <field name="view_template_id" ref="mesomb_form"/>
-<!--            <field name="registration_view_template_id" ref="mesomb_s2s_form"/>-->
+            <field name="payment_icon_ids" eval="[(6, 0, [ ref('icon_mobile_money'), ref('icon_orange_money')])]"/>
         </record>
     </data>
 </odoo>
